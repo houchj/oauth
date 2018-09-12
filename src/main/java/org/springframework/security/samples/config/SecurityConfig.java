@@ -30,22 +30,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated()
-        .and()
-        .oauth2Login()
-        .clientRegistrationRepository(clientRegistrationRepository())
-        .authorizedClientService(authorizedClientService());
+//        http.authorizeRequests().anyRequest().authenticated()
+//        .and()
+//        .oauth2Login()
+//        .clientRegistrationRepository(clientRegistrationRepository())
+//        .authorizedClientService(authorizedClientService());
 
-//		http.authorizeRequests()
-//			.antMatchers("/oauth_login")
-//			.permitAll()
-//			.anyRequest()
-//			.authenticated()
-//			.and()
-//			.oauth2Login()
-//			.clientRegistrationRepository(clientRegistrationRepository())
-//	        .authorizedClientService(authorizedClientService())
-//			.loginPage("/oauth_login");
+		http.authorizeRequests()
+			.antMatchers("/oauth_login")
+			.permitAll()
+			.anyRequest()
+			.authenticated()
+			.and()
+			.oauth2Login()
+			.clientRegistrationRepository(clientRegistrationRepository())
+	        .authorizedClientService(authorizedClientService())
+			.loginPage("/oauth_login");
 	}
 
 	@Bean
