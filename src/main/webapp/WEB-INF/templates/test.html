@@ -1,8 +1,14 @@
 <html>
 </head>
-    <body>
-    <h2 th:text="${msg}"></h2>
-        <span th:text=${msg}> </span>
-        <div th:text=${userName}> asdasdad </div>
-    </body>
+<body>
+	<h2 th:text="${msg}"></h2>
+	<span th:text=${msg}> </span>
+	<div th:text=${userName}></div>
+
+	<form action="/logout" method="POST">
+		<input type="hidden" th:name="${_csrf.parameterName}"
+			th:value="${_csrf.token}" /> <input type="submit" value="Logout" />
+	</form>
+	<a href="/logout">Logout</a>
+</body>
 </html>

@@ -50,7 +50,7 @@ public class MyMainSample123Controller {
 	@Autowired
 	private OAuth2AuthorizedClientService authorizedClientService;
 
-	@RequestMapping("/")
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(Model model, OAuth2AuthenticationToken authentication) {
 		OAuth2AuthorizedClient authorizedClient = this.getAuthorizedClient(authentication);
 		model.addAttribute("userName", authentication.getName());

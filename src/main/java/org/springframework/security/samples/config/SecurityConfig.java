@@ -36,16 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        .clientRegistrationRepository(clientRegistrationRepository())
 //        .authorizedClientService(authorizedClientService());
 
-		http.authorizeRequests()
-			.antMatchers("/oauth_login")
-			.permitAll()
-			.anyRequest()
-			.authenticated()
-			.and()
-			.oauth2Login()
-			.clientRegistrationRepository(clientRegistrationRepository())
-	        .authorizedClientService(authorizedClientService())
-			.loginPage("/oauth_login");
+		http.authorizeRequests().antMatchers("/oauth_login").permitAll().anyRequest().authenticated().and()
+				.oauth2Login().clientRegistrationRepository(clientRegistrationRepository())
+				.authorizedClientService(authorizedClientService()).loginPage("/oauth_login");
+
+		http.logout().logoutUrl("/logout").invalidateHttpSession(true);
 	}
 
 	@Bean
