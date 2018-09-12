@@ -19,8 +19,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ResolvableType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -30,7 +29,6 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -49,8 +47,8 @@ import reactor.core.publisher.Mono;
 @Controller
 public class MyMainSample123Controller {
 
-//	@Autowired
-	private OAuth2AuthorizedClientService authorizedClientService = null;
+	@Autowired
+	private OAuth2AuthorizedClientService authorizedClientService;
 
 	@RequestMapping("/")
 	public String index(Model model, OAuth2AuthenticationToken authentication) {
@@ -91,10 +89,10 @@ public class MyMainSample123Controller {
 	private static String authorizationRequestBaseUri = "oauth2/authorization";
 	Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
 
-//	@Autowired
-	private ClientRegistrationRepository clientRegistrationRepository = null;
+	@Autowired
+	private ClientRegistrationRepository clientRegistrationRepository;
 
-	@GetMapping("/oauth_login")
+	@RequestMapping(value = "/oauth_login", method = RequestMethod.GET)
 	public String getLoginPage(Model model) {
 		Iterable<ClientRegistration> clientRegistrations = null;
 		ResolvableType type = ResolvableType.forInstance(clientRegistrationRepository).as(Iterable.class);
@@ -111,22 +109,14 @@ public class MyMainSample123Controller {
 
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public ModelAndView test() {
-
-//		response.setContentType("text/html");
-//		response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
-//		response.setHeader("Pragma", "no-cache");
-//		response.setHeader("ContentType", "text/html");
-		
 		ModelAndView mv = new ModelAndView("test");
-		
 		mv.getModel().put("msg", "hellooooo");
 		mv.getModel().put("userName", "xxxx");
 		return mv;
-//		return "test";
 	}
-	
+
 	@ModelAttribute
 	public void addAttributes(Model model) {
-	    model.addAttribute("msg", "Welcome to the Netherlands!");
+		model.addAttribute("msg", "Welcome to the Netherlands!");
 	}
 }
