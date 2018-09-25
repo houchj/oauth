@@ -19,6 +19,8 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
@@ -26,7 +28,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @PropertySource("classpath:application.properties")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private static List<String> clients = Arrays.asList("github");
+	private static List<String> clients = Arrays.asList("github", "neo");
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -78,6 +80,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		if (client.equals("github")) {
 			return CommonOAuth2Provider.GITHUB.getBuilder(client).clientId(clientId).clientSecret(clientSecret).build();
 		}
+		if (client.equals("neo")) {
+			return NeoBuild(clientId, clientSecret).clientId(clientId).clientSecret(clientSecret).build();
+		}
 		return null;
+	}
+
+	protected final ClientRegistration.Builder getBuilder(String registrationId, ClientAuthenticationMethod method,
+			String redirectUri) {
+		ClientRegistration.Builder builder = ClientRegistration.withRegistrationId(registrationId);
+		builder.clientAuthenticationMethod(method);
+		builder.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE);
+		builder.redirectUriTemplate(redirectUri);
+		return builder;
+	}
+
+	private ClientRegistration.Builder NeoBuild(String clientId, String clientSecret) {
+		ClientRegistration.Builder builder = getBuilder("neo", ClientAuthenticationMethod.BASIC,
+				"https://i075885trial-i075885useast-dev2-oauth-demo.cfapps.us10.hana.ondemand.com/login/oauth2/code/neo");
+		builder.scope("view_photos");
+		builder.authorizationUri("https://oauthasservices-i075885trial.hanatrial.ondemand.com/oauth2/api/v1/authorize");
+		builder.tokenUri("https://oauthasservices-i075885trial.hanatrial.ondemand.com/oauth2/api/v1/token");
+		builder.userInfoUri("https://oauthasservices-i075885trial.hanatrial.ondemand.com/oauth2");
+		builder.userNameAttributeName("userId");
+		builder.clientName("Neo");
+		return builder;
 	}
 }
